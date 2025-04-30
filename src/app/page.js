@@ -1,41 +1,52 @@
 // app/page.js
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
-const jobRoles = [
-  {
-    id: 1,
-    title: "Frontend Developer",
-    description: "React, Next.js, JavaScript, TypeScript",
-    experience: "2+ years"
-  },
-  {
-    id: 2,
-    title: "Backend Developer",
-    description: "Python, Django, Node.js, APIs",
-    experience: "3+ years"
-  },
-  {
-    id: 3,
-    title: "Full Stack Developer",
-    description: "React, Node.js, MongoDB, Express",
-    experience: "4+ years"
-  },
-  {
-    id: 4,
-    title: "DevOps Engineer",
-    description: "AWS, Docker, Kubernetes, CI/CD",
-    experience: "3+ years"
-  }
-];
 
 export default function Home() {
   const router = useRouter();
-  
+  const [jobRoles, setJobRoles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchJobRoles = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/job-roles/');
+        if (!response.ok) {
+          throw new Error('Failed to fetch job roles');
+        }
+        const data = await response.json();
+        setJobRoles(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobRoles();
+  }, []);
+
   const handleCardClick = (jobId) => {
     router.push(`/interview/${jobId}`);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p>Loading job roles...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-red-500">Error: {error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
