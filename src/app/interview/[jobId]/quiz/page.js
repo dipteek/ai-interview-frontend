@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { 
   ChevronLeft, 
@@ -11,7 +11,8 @@ import {
   ArrowLeft, 
   HelpCircle, 
   Layout, 
-  Loader2 
+  Loader2,
+  Timer
 } from 'lucide-react';
 
 export default function QuizPage() {
@@ -25,12 +26,25 @@ export default function QuizPage() {
   const [loading, setLoading] = useState(true);
   const [timeSpent, setTimeSpent] = useState(0);
   const [feedback, setFeedback] = useState({ show: false, isCorrect: false });
+  const [timeLimit, setTimeLimit] = useState(null);
+  const [timeRemaining, setTimeRemaining] = useState(null);
+  const [timeExpired, setTimeExpired] = useState(false);
+  const timerRef = useRef(null);
 
   useEffect(() => {
     const storedQuestions = localStorage.getItem('interviewQuestions');
+    const storedTimeLimit = localStorage.getItem('interviewTimeLimit');
+    
     if (storedQuestions) {
       try {
         setQuestions(JSON.parse(storedQuestions));
+        
+        // Set time limit if it exists
+        if (storedTimeLimit && storedTimeLimit !== '') {
+          const limitInMinutes = parseInt(storedTimeLimit, 10);
+          setTimeLimit(limitInMinutes);
+          setTimeRemaining(limitInMinutes * 60); // Convert to seconds
+        }
       } catch (e) {
         console.error("Error parsing questions:", e);
       } finally {
@@ -41,15 +55,30 @@ export default function QuizPage() {
     }
   }, [jobId, router]);
 
-  // Timer for tracking time spent
+  // Timer for tracking time spent and time remaining
   useEffect(() => {
     if (!quizCompleted && !loading && questions.length > 0) {
-      const timer = setInterval(() => {
+      timerRef.current = setInterval(() => {
         setTimeSpent(prev => prev + 1);
+        
+        // Update time remaining if time limit exists
+        if (timeRemaining !== null) {
+          setTimeRemaining(prev => {
+            if (prev <= 1) {
+              // Time's up
+              clearInterval(timerRef.current);
+              setTimeExpired(true);
+              setQuizCompleted(true);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }
       }, 1000);
-      return () => clearInterval(timer);
+      
+      return () => clearInterval(timerRef.current);
     }
-  }, [quizCompleted, loading, questions.length]);
+  }, [quizCompleted, loading, questions.length, timeRemaining]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -102,6 +131,14 @@ export default function QuizPage() {
     if (percentage >= 75) return "bg-blue-100 text-blue-800 border-blue-200";
     if (percentage >= 60) return "bg-yellow-100 text-yellow-800 border-yellow-200";
     return "bg-red-100 text-red-800 border-red-200";
+  };
+
+  // Get time remaining styling (changes color when getting low)
+  const getTimeRemainingStyle = () => {
+    if (timeRemaining === null) return "text-gray-500";
+    if (timeRemaining <= 60) return "text-red-600 font-bold animate-pulse";
+    if (timeRemaining <= 180) return "text-orange-500 font-medium";
+    return "text-blue-600";
   };
 
   if (loading) {
@@ -188,11 +225,22 @@ export default function QuizPage() {
             <div className="bg-blue-50 p-6 border-b border-blue-100 text-center">
               <div className="flex justify-center mb-4">
                 <div className="bg-blue-100 p-3 rounded-full">
-                  <Award className="h-10 w-10 text-blue-700" />
+                  {timeExpired ? (
+                    <Timer className="h-10 w-10 text-orange-600" />
+                  ) : (
+                    <Award className="h-10 w-10 text-blue-700" />
+                  )}
                 </div>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900">Interview Assessment Complete</h2>
-              <p className="text-gray-600 mt-2">You've completed all {questions.length} questions</p>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {timeExpired ? "Time's Up!" : "Interview Assessment Complete"}
+              </h2>
+              <p className="text-gray-600 mt-2">
+                {timeExpired 
+                  ? `You completed ${currentQuestionIndex} of ${questions.length} questions`
+                  : `You've completed all ${questions.length} questions`
+                }
+              </p>
             </div>
             
             <div className="p-6">
@@ -227,13 +275,30 @@ export default function QuizPage() {
                 
                 <div className="mt-6 text-center">
                   <p className="text-lg font-semibold text-gray-800">
-                    You scored {score} out of {questions.length} questions correctly
+                    You scored {score} out of {timeExpired ? currentQuestionIndex : questions.length} questions correctly
                   </p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Time spent: {formatTime(timeSpent)}
-                  </p>
+                  <div className="flex items-center justify-center gap-4 text-sm text-gray-500 mt-1">
+                    <span className="flex items-center">
+                      <Clock className="h-4 w-4 mr-1" />
+                      Time spent: {formatTime(timeSpent)}
+                    </span>
+                    {timeLimit && (
+                      <span className="flex items-center">
+                        <Timer className="h-4 w-4 mr-1" />
+                        Time limit: {timeLimit} minutes
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
+              
+              {timeExpired && (
+                <div className="p-4 border rounded-lg mb-6 bg-orange-100 text-orange-800 border-orange-200">
+                  <p className="font-medium">
+                    Your time ran out! You managed to answer {currentQuestionIndex} out of {questions.length} questions.
+                  </p>
+                </div>
+              )}
               
               <div className={`p-4 border rounded-lg mb-6 ${getPerformanceColor()}`}>
                 <p className="font-medium">{getPerformanceMessage()}</p>
@@ -254,7 +319,7 @@ export default function QuizPage() {
                     <span className="text-sm font-medium text-gray-700">Average Time per Question</span>
                   </div>
                   <p className="text-2xl font-bold text-blue-600">
-                    {formatTime(Math.round(timeSpent / questions.length))}
+                    {formatTime(Math.round(timeSpent / (timeExpired ? currentQuestionIndex || 1 : questions.length)))}
                   </p>
                 </div>
               </div>
@@ -267,6 +332,10 @@ export default function QuizPage() {
                     setScore(0);
                     setQuizCompleted(false);
                     setTimeSpent(0);
+                    setTimeExpired(false);
+                    if (timeLimit) {
+                      setTimeRemaining(timeLimit * 60);
+                    }
                   }}
                   className="flex-1 py-3 px-4 bg-white border border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center"
                 >
@@ -317,21 +386,44 @@ export default function QuizPage() {
               </button>
               <h1 className="text-xl font-bold">Interview in Progress</h1>
             </div>
-            <div className="flex items-center">
-              <Clock className="h-4 w-4 mr-1" />
-              <span className="text-sm">{formatTime(timeSpent)}</span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center">
+                <Clock className="h-4 w-4 mr-1" />
+                <span className="text-sm">{formatTime(timeSpent)}</span>
+              </div>
+              
+              {timeRemaining !== null && (
+                <div className={`flex items-center ${getTimeRemainingStyle()}`}>
+                  <Timer className="h-4 w-4 mr-1" />
+                  <span className="text-sm">
+                    {timeRemaining <= 60 ? `${timeRemaining}s left!` : formatTime(timeRemaining)}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Progress Bar */}
+      {/* Progress and Time Bars */}
       <div className="w-full bg-gray-200 h-2">
         <div 
           className="bg-blue-600 h-2 transition-all duration-300" 
           style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
         ></div>
       </div>
+      
+      {timeRemaining !== null && (
+        <div className="w-full bg-gray-200 h-1">
+          <div 
+            className={`h-1 transition-all duration-1000 ${
+              timeRemaining <= 60 ? 'bg-red-600' : 
+              timeRemaining <= 180 ? 'bg-orange-500' : 'bg-green-600'
+            }`}
+            style={{ width: `${(timeRemaining / (timeLimit * 60)) * 100}%` }}
+          ></div>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -409,7 +501,10 @@ export default function QuizPage() {
               }
             >
               {feedback.show ? (
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                <span className="flex items-center justify-center">
+                  <Loader2 className="animate-spin -ml-1 mr-2 h-5 w-5" />
+                  Processing...
+                </span>
               ) : currentQuestionIndex === questions.length - 1 ? (
                 <>
                   Finish Interview
@@ -424,6 +519,18 @@ export default function QuizPage() {
             </button>
           </div>
         </div>
+        
+        {timeLimit && (
+          <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center justify-center">
+            <Timer className="h-5 w-5 text-blue-600 mr-2" />
+            <span className="text-sm text-blue-800">
+              {timeRemaining <= 60 
+                ? <span className="font-bold text-red-600">Time is almost up!</span>
+                : `Time limit: ${timeLimit} minutes`
+              }
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

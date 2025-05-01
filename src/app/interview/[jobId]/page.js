@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Briefcase, Clock, AlertCircle, ChevronLeft, Check, X, Code, Loader2 } from 'lucide-react';
+import { Briefcase, Clock, AlertCircle, ChevronLeft, Check, X, Code, Loader2, Timer } from 'lucide-react';
 
 export default function InterviewDetails() {
   const { jobId } = useParams();
@@ -13,6 +13,7 @@ export default function InterviewDetails() {
   const [loadingJob, setLoadingJob] = useState(true);
   const [error, setError] = useState(null);
   const [availableTechStacks, setAvailableTechStacks] = useState([]);
+  const [timeLimit, setTimeLimit] = useState('');
   
   // Experience options for dropdown
   const experienceOptions = [
@@ -22,6 +23,14 @@ export default function InterviewDetails() {
     { value: 'Mid-Level (3-5 years)', label: 'Mid-Level (3-5 years)' },
     { value: 'Senior (5-8 years)', label: 'Senior (5-8 years)' },
     { value: 'Lead/Expert (8+ years)', label: 'Lead/Expert (8+ years)' }
+  ];
+
+  // Time limit options for dropdown
+  const timeLimitOptions = [
+    { value: '', label: 'No time limit' },
+    { value: '2', label: '2 minutes' },
+    { value: '5', label: '5 minutes' },
+    { value: '8', label: '8 minutes' }
   ];
 
   // Extract tech stacks from description
@@ -80,7 +89,8 @@ export default function InterviewDetails() {
         position: job.title,
         description: job.description,
         experience: experience,
-        techStack: selectedTechStacks
+        techStack: selectedTechStacks,
+        timeLimit: timeLimit // Add timeLimit to the payload
       };
 
       const response = await fetch('http://127.0.0.1:8000/api/generate-questions/', {
@@ -97,6 +107,7 @@ export default function InterviewDetails() {
 
       const data = await response.json();
       localStorage.setItem('interviewQuestions', JSON.stringify(data.questions));
+      localStorage.setItem('interviewTimeLimit', timeLimit); // Store the time limit
       router.push(`/interview/${jobId}/quiz`);
     } catch (error) {
       console.error('Error generating questions:', error);
@@ -237,6 +248,33 @@ export default function InterviewDetails() {
               )}
             </div>
             
+            {/* Time Limit Dropdown */}
+            <div className="mb-8">
+              <label htmlFor="timeLimit" className="block text-lg font-semibold text-gray-800 mb-3">
+                Time Limit for Quiz
+              </label>
+              <div className="relative">
+                <select
+                  id="timeLimit"
+                  value={timeLimit}
+                  onChange={(e) => setTimeLimit(e.target.value)}
+                  className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 appearance-none bg-white"
+                >
+                  {timeLimitOptions.map(option => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                  <Timer className="h-5 w-5" />
+                </div>
+              </div>
+              <p className="mt-2 text-sm text-gray-500">
+                {timeLimit 
+                  ? `Your interview will be timed for ${timeLimit} minutes` 
+                  : "No time limit - take as long as you need"}
+              </p>
+            </div>
+            
             {/* Tech Stack Selection */}
             <div className="mb-8">
               <div className="flex items-center mb-3">
@@ -315,6 +353,10 @@ export default function InterviewDetails() {
             <li className="flex items-start">
               <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
               <span className="text-gray-700">Practice with real industry-standard questions</span>
+            </li>
+            <li className="flex items-start">
+              <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+              <span className="text-gray-700">Optional time limit to simulate real interview pressure</span>
             </li>
           </ul>
         </div>
