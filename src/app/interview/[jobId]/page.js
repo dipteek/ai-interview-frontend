@@ -14,7 +14,7 @@ export default function InterviewDetails() {
   const [error, setError] = useState(null);
   const [availableTechStacks, setAvailableTechStacks] = useState([]);
   const [timeLimit, setTimeLimit] = useState('');
-  const [loadingText, setLoadingText] = useState('Searching for the perfect questions');
+  const [loadingText, setLoadingText] = useState('Searching questions');
   const [dots, setDots] = useState('');
   
   // Experience options for dropdown
