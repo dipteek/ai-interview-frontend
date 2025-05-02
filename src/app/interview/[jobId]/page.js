@@ -14,6 +14,8 @@ export default function InterviewDetails() {
   const [error, setError] = useState(null);
   const [availableTechStacks, setAvailableTechStacks] = useState([]);
   const [timeLimit, setTimeLimit] = useState('');
+  const [loadingText, setLoadingText] = useState('Searching for the perfect questions');
+  const [dots, setDots] = useState('');
   
   // Experience options for dropdown
   const experienceOptions = [
@@ -32,6 +34,20 @@ export default function InterviewDetails() {
     { value: '5', label: '5 minutes' },
     { value: '8', label: '8 minutes' }
   ];
+
+  // Typing animation effect for loading text
+  useEffect(() => {
+    let interval;
+    if (isLoading) {
+      interval = setInterval(() => {
+        setDots(prev => {
+          if (prev.length >= 3) return '';
+          return prev + '.';
+        });
+      }, 400);
+    }
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   // Extract tech stacks from description
   const extractTechStacks = (description) => {
@@ -270,7 +286,7 @@ export default function InterviewDetails() {
               </div>
               <p className="mt-2 text-sm text-gray-500">
                 {timeLimit 
-                  ? `Your interview will be timed for ${timeLimit} minutes` 
+                  ? `Your interview will be timed for ${timeLimitOptions.find(opt => opt.value === timeLimit)?.label.toLowerCase() || timeLimit + ' minutes'}` 
                   : "No time limit - take as long as you need"}
               </p>
             </div>
@@ -324,7 +340,7 @@ export default function InterviewDetails() {
               {isLoading ? (
                 <span className="flex items-center justify-center">
                   <Loader2 className="animate-spin -ml-1 mr-2 h-5 w-5" />
-                  Generating Questions...
+                  <span className="font-medium">{loadingText}<span className="inline-block w-6 text-left">{dots}</span></span>
                 </span>
               ) : (
                 'Start Interview Preparation'
