@@ -1,6 +1,7 @@
 
 import DataDrivenResults from '@/components/wedigit/DataDrivenResults';
 import HomeBanner from '@/components/wedigit/HomeBanner';
+import InterviewProcessCTA from '@/components/wedigit/InterviewProcessCTA';
 import IntervueHero from '@/components/wedigit/IntervueHero';
 import ProductsSection from '@/components/wedigit/ProductsSection';
 
@@ -20,6 +21,7 @@ export default function Home() {
         <ProductsSection/>
         <IntervueHero/>
         <DataDrivenResults/>
+        <InterviewProcessCTA/>
       </div>
     </main>
   );
