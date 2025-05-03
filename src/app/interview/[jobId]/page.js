@@ -134,7 +134,7 @@ export default function InterviewDetails() {
   };
 
   const goBack = () => {
-    router.push('/');
+    router.push('/interview');
   };
 
   if (loadingJob) {

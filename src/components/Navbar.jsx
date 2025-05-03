@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { 
-  FaUser, 
-  FaBars, 
-  FaTimes, 
-  FaChevronDown, 
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import {
+  FaUser,
+  FaBars,
+  FaTimes,
+  FaChevronDown,
   FaChevronRight,
   FaCheckCircle,
   FaBolt,
   FaUsers,
   FaBuilding,
-  FaHome
-} from 'react-icons/fa';
+  FaHome,
+} from "react-icons/fa";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,23 +30,23 @@ const Navbar = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   // Close mobile menu when resizing to desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768 && isOpen) {
+      if (window.innerWidth >= 1024 && isOpen) {
         setIsOpen(false);
       }
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, [isOpen]);
 
@@ -54,14 +54,14 @@ const Navbar = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       const target = event.target;
-      if (!target.closest('.dropdown-container')) {
+      if (!target.closest(".dropdown-container")) {
         setActiveDropdown(null);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -74,11 +74,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav 
+    <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white shadow-md py-3' 
-          : 'bg-white py-4'
+        isScrolled ? "bg-white shadow-md py-3" : "bg-white py-4"
       }`}
     >
       <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -93,21 +91,33 @@ const Navbar = () => {
                 <span className="text-lg font-bold text-indigo-600">
                   AI Interview
                 </span>
-                <span className="text-xs text-gray-500 -mt-1 hidden sm:block">Professional Solutions</span>
+                <span className="text-xs text-gray-500 -mt-1 hidden sm:block">
+                  Professional Solutions
+                </span>
               </div>
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          {/* Desktop Navigation (only visible on large screens) */}
+          <div className="hidden lg:flex items-center space-x-1">
             {/* Main navigation links */}
             <div className="flex">
-              <Link href="/" className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all">
+              <Link
+                href="/"
+                className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
+              >
                 Home
               </Link>
 
+              <Link
+                href="/interview"
+                className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
+              >
+                Interview
+              </Link>
+
               {/* Products Dropdown */}
-              <div className="relative dropdown-container">
+              {/* <div className="relative dropdown-container">
                 <button 
                   onClick={() => toggleDropdown('products')}
                   className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors flex items-center gap-1 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
@@ -145,28 +155,39 @@ const Navbar = () => {
                     </div>
                   </div>
                 )}
-              </div>
+              </div> */}
 
               {/* Solutions Dropdown */}
               <div className="relative dropdown-container">
-                <button 
-                  onClick={() => toggleDropdown('solutions')}
+                <button
+                  onClick={() => toggleDropdown("solutions")}
                   className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors flex items-center gap-1 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
                 >
                   Solutions
-                  <FaChevronDown 
-                    className={`h-3 w-3 transition-transform ${activeDropdown === 'solutions' ? 'rotate-180' : ''}`} 
+                  <FaChevronDown
+                    className={`h-3 w-3 transition-transform ${
+                      activeDropdown === "solutions" ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
-                {activeDropdown === 'solutions' && (
+                {activeDropdown === "solutions" && (
                   <div className="absolute mt-2 w-56 bg-white rounded-md shadow-lg p-2 z-50 animate-fadeIn">
-                    <Link href="/enterprise" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md">
+                    <Link
+                      href="/enterprise"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
+                    >
                       Enterprise
                     </Link>
-                    <Link href="/small-business" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md">
+                    <Link
+                      href="/small-business"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
+                    >
                       Small Business
                     </Link>
-                    <Link href="/personal" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md">
+                    <Link
+                      href="/personal"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
+                    >
                       Personal
                     </Link>
                   </div>
@@ -175,55 +196,66 @@ const Navbar = () => {
 
               {/* Resources Dropdown */}
               <div className="relative dropdown-container">
-                <button 
-                  onClick={() => toggleDropdown('resources')}
+                <button
+                  onClick={() => toggleDropdown("resources")}
                   className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors flex items-center gap-1 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
                 >
                   Resources
-                  <FaChevronDown 
-                    className={`h-3 w-3 transition-transform ${activeDropdown === 'resources' ? 'rotate-180' : ''}`} 
+                  <FaChevronDown
+                    className={`h-3 w-3 transition-transform ${
+                      activeDropdown === "resources" ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
-                {activeDropdown === 'resources' && (
+                {activeDropdown === "resources" && (
                   <div className="absolute mt-2 w-56 bg-white rounded-md shadow-lg p-2 z-50 animate-fadeIn">
-                    <Link href="/blog" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md">
+                    <Link
+                      href="/blog"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
+                    >
                       Blog
                     </Link>
-                    <Link href="/documentation" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md">
+                    <Link
+                      href="/documentation"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
+                    >
                       Documentation
                     </Link>
-                    <Link href="/webinars" className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md">
+                    <Link
+                      href="/webinars"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
+                    >
                       Webinars
                     </Link>
                   </div>
                 )}
               </div>
 
-              <Link href="/pricing" className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all">
+              {/* <Link href="/pricing" className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all">
                 Pricing
-              </Link>
-              
-              <Link href="/interview" className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all">
-                Interview
-              </Link>
-              
-              <Link href="/contact" className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all">
+              </Link> */}
+
+              <Link
+                href="/contact"
+                className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
+              >
                 Contact
               </Link>
             </div>
 
             {/* Right side elements (login, CTA) */}
             <div className="flex items-center pl-6 space-x-4 border-l border-gray-200">
-              
               {/* Login button */}
-              <Link href="/login" className="px-4 py-2 text-sm font-medium border border-black text-gray-700 bg-white hover:bg-gray-50">
-                
+              <Link
+                href="/login"
+                className="px-4 py-2 text-sm font-medium border border-black text-gray-700 bg-white hover:bg-gray-50"
+              >
                 Login
               </Link>
-              
+
               {/* Get Started button */}
-              <Link 
-                href="/get-started" 
+              <Link
+                href="/interview"
                 className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-all"
               >
                 Get Started
@@ -231,9 +263,8 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center space-x-4">
-            
+          {/* Mobile menu button (visible on medium and small screens) */}
+          <div className="lg:hidden flex items-center space-x-4">
             {/* Hamburger button */}
             <button
               onClick={toggleMenu}
@@ -251,13 +282,19 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu, show/hide based on menu state */}
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-screen opacity-100 pt-4' : 'max-h-0 opacity-0'}`}>
+      {/* Mobile menu, show/hide based on menu state (visible on medium and small screens) */}
+      <div
+        className={`lg:hidden overflow-hidden transition-all duration-300 ${
+          isOpen ? "max-h-screen opacity-100 pt-4" : "max-h-0 opacity-0"
+        }`}
+      >
         <div className="pt-3 pb-4 bg-white rounded-lg mx-2">
-        
           {/* Navigation links */}
           <div className="space-y-1">
-            <Link href="/" className="flex items-center px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600 border-b border-gray-100">
+            <Link
+              href="/"
+              className="flex items-center px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600 border-b border-gray-100"
+            >
               <div className="flex items-center">
                 <div className="bg-indigo-100 p-2 rounded-md mr-3">
                   <FaHome className="h-4 w-4 text-indigo-600" />
@@ -265,9 +302,9 @@ const Navbar = () => {
                 <span>Home</span>
               </div>
             </Link>
-            
+
             {/* Mobile dropdown for Products */}
-            <div className="border-b border-gray-100">
+            {/* <div className="border-b border-gray-100">
               <button 
                 onClick={() => toggleDropdown('mobileProducts')}
                 className="flex justify-between items-center w-full px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600"
@@ -298,12 +335,24 @@ const Navbar = () => {
                   </Link>
                 </div>
               </div>
-            </div>
-            
+            </div> */}
+
+            <Link
+              href="/interview"
+              className="flex items-center px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600 border-b border-gray-100"
+            >
+              <div className="flex items-center">
+                <div className="bg-indigo-100 p-2 rounded-md mr-3">
+                  <FaUser className="h-4 w-4 text-indigo-600" />
+                </div>
+                <span>Interview</span>
+              </div>
+            </Link>
+
             {/* Mobile dropdown for Solutions */}
             <div className="border-b border-gray-100">
-              <button 
-                onClick={() => toggleDropdown('mobileSolutions')}
+              <button
+                onClick={() => toggleDropdown("mobileSolutions")}
                 className="flex justify-between items-center w-full px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600"
               >
                 <div className="flex items-center">
@@ -312,32 +361,49 @@ const Navbar = () => {
                   </div>
                   <span>Solutions</span>
                 </div>
-                <FaChevronDown 
-                  className={`h-4 w-4 transition-transform duration-300 text-gray-500 ${activeDropdown === 'mobileSolutions' ? 'rotate-180' : ''}`} 
+                <FaChevronDown
+                  className={`h-4 w-4 transition-transform duration-300 text-gray-500 ${
+                    activeDropdown === "mobileSolutions" ? "rotate-180" : ""
+                  }`}
                 />
               </button>
-              <div className={`overflow-hidden transition-all duration-300 ${activeDropdown === 'mobileSolutions' ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  activeDropdown === "mobileSolutions"
+                    ? "max-h-48 opacity-100"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="bg-gray-50 rounded-md m-2 p-2 space-y-1">
-                  <Link href="/enterprise" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md">
+                  <Link
+                    href="/enterprise"
+                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md"
+                  >
                     <div className="w-1 h-1 bg-indigo-600 rounded-full mr-2"></div>
                     Enterprise
                   </Link>
-                  <Link href="/small-business" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md">
+                  <Link
+                    href="/small-business"
+                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md"
+                  >
                     <div className="w-1 h-1 bg-indigo-600 rounded-full mr-2"></div>
                     Small Business
                   </Link>
-                  <Link href="/personal" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md">
+                  <Link
+                    href="/personal"
+                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md"
+                  >
                     <div className="w-1 h-1 bg-indigo-600 rounded-full mr-2"></div>
                     Personal
                   </Link>
                 </div>
               </div>
             </div>
-            
+
             {/* Mobile dropdown for Resources */}
             <div className="border-b border-gray-100">
-              <button 
-                onClick={() => toggleDropdown('mobileResources')}
+              <button
+                onClick={() => toggleDropdown("mobileResources")}
                 className="flex justify-between items-center w-full px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600"
               >
                 <div className="flex items-center">
@@ -346,47 +412,58 @@ const Navbar = () => {
                   </div>
                   <span>Resources</span>
                 </div>
-                <FaChevronDown 
-                  className={`h-4 w-4 transition-transform duration-300 text-gray-500 ${activeDropdown === 'mobileResources' ? 'rotate-180' : ''}`} 
+                <FaChevronDown
+                  className={`h-4 w-4 transition-transform duration-300 text-gray-500 ${
+                    activeDropdown === "mobileResources" ? "rotate-180" : ""
+                  }`}
                 />
               </button>
-              <div className={`overflow-hidden transition-all duration-300 ${activeDropdown === 'mobileResources' ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  activeDropdown === "mobileResources"
+                    ? "max-h-48 opacity-100"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="bg-gray-50 rounded-md m-2 p-2 space-y-1">
-                  <Link href="/blog" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md">
+                  <Link
+                    href="/blog"
+                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md"
+                  >
                     <div className="w-1 h-1 bg-indigo-600 rounded-full mr-2"></div>
                     Blog
                   </Link>
-                  <Link href="/documentation" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md">
+                  <Link
+                    href="/documentation"
+                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md"
+                  >
                     <div className="w-1 h-1 bg-indigo-600 rounded-full mr-2"></div>
                     Documentation
                   </Link>
-                  <Link href="/webinars" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md">
+                  <Link
+                    href="/webinars"
+                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md"
+                  >
                     <div className="w-1 h-1 bg-indigo-600 rounded-full mr-2"></div>
                     Webinars
                   </Link>
                 </div>
               </div>
             </div>
-            
-            <Link href="/pricing" className="flex items-center px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600 border-b border-gray-100">
+
+            {/* <Link href="/pricing" className="flex items-center px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600 border-b border-gray-100">
               <div className="flex items-center">
                 <div className="bg-indigo-100 p-2 rounded-md mr-3">
                   <FaBuilding className="h-4 w-4 text-indigo-600" />
                 </div>
                 <span>Pricing</span>
               </div>
-            </Link>
-            
-            {/* <Link href="/about" className="flex items-center px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600 border-b border-gray-100">
-              <div className="flex items-center">
-                <div className="bg-indigo-100 p-2 rounded-md mr-3">
-                  <FaUser className="h-4 w-4 text-indigo-600" />
-                </div>
-                <span>About</span>
-              </div>
             </Link> */}
-            
-            <Link href="/contact" className="flex items-center px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600 border-b border-gray-100">
+
+            <Link
+              href="/contact"
+              className="flex items-center px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600 border-b border-gray-100"
+            >
               <div className="flex items-center">
                 <div className="bg-indigo-100 p-2 rounded-md mr-3">
                   <FaUsers className="h-4 w-4 text-indigo-600" />
@@ -395,20 +472,29 @@ const Navbar = () => {
               </div>
             </Link>
           </div>
-          
+
           {/* Mobile buttons */}
           <div className="px-4 py-4 space-y-3 mt-2">
             <div className="grid grid-cols-2 gap-2">
-              <Link href="/login" className="flex items-center justify-center px-3 py-2 text-sm font-medium border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-md shadow-sm">
+              <Link
+                href="/login"
+                className="flex items-center justify-center px-3 py-2 text-sm font-medium border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-md shadow-sm"
+              >
                 <FaUser className="h-4 w-4 mr-2" />
                 Login
               </Link>
-              <Link href="/signup" className="flex items-center justify-center px-3 py-2 text-sm font-medium border border-indigo-300 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md shadow-sm">
+              <Link
+                href="/signup"
+                className="flex items-center justify-center px-3 py-2 text-sm font-medium border border-indigo-300 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md shadow-sm"
+              >
                 <FaBuilding className="h-4 w-4 mr-2" />
                 Sign Up
               </Link>
             </div>
-            <Link href="/get-started" className="block w-full px-4 py-3 text-base font-medium text-center bg-indigo-600 text-white rounded-md hover:bg-indigo-700 shadow-md transition-all duration-300 transform hover:translate-y-px">
+            <Link
+              href="/get-started"
+              className="block w-full px-4 py-3 text-base font-medium text-center bg-indigo-600 text-white rounded-md hover:bg-indigo-700 shadow-md transition-all duration-300 transform hover:translate-y-px"
+            >
               Get Started
             </Link>
           </div>
