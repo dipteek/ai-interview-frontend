@@ -3,6 +3,7 @@ import DataDrivenResults from '@/components/wedigit/DataDrivenResults';
 import HomeBanner from '@/components/wedigit/HomeBanner';
 import InterviewProcessCTA from '@/components/wedigit/InterviewProcessCTA';
 import IntervueHero from '@/components/wedigit/IntervueHero';
+import LogoCarousel from '@/components/wedigit/LogoCarousel';
 import ProductsSection from '@/components/wedigit/ProductsSection';
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
     <main className="min-h-screen">
       <div className="pt-20">
         <HomeBanner />
+        <LogoCarousel/>
       </div>
       
       {/* You can add more sections below the banner */}
