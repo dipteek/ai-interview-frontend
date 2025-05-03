@@ -1,0 +1,204 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .setupContainer {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+  
+  .formGroup {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+  
+  .formGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #4a5568;
+  }
+  
+  .formGroup input[type="number"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .techStackContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  .techStackItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .generateButton {
+    background: #4299e1;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .generateButton:hover {
+    background: #3182ce;
+  }
+  
+  .generateButton:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+  }
+  
+  .questionContainer {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+  
+  .questionHeader {
+    margin-bottom: 1.5rem;
+  }
+  
+  .questionText {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    min-height: 100px;
+  }
+  
+  .answerContainer {
+    margin-top: 2rem;
+  }
+  
+  .answerContainer h3 {
+    margin-bottom: 0.5rem;
+    color: #4a5568;
+  }
+  
+  .answerContainer textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .recordingControls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .recordButton, .stopButton, .speakButton {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  
+  .recordButton {
+    background: #f56565;
+    color: white;
+  }
+  
+  .stopButton {
+    background: #f6ad55;
+    color: white;
+  }
+  
+  .speakButton {
+    background: #68d391;
+    color: white;
+  }
+  
+  .navigationButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
+  
+  .prevButton, .nextButton, .submitButton, .homeButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .prevButton {
+    background: #e2e8f0;
+    color: #4a5568;
+  }
+  
+  .prevButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .nextButton, .submitButton, .homeButton {
+    background: #4299e1;
+    color: white;
+  }
+  
+  .nextButton:hover, .submitButton:hover, .homeButton:hover {
+    background: #3182ce;
+  }
+  
+  .analysisContainer {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+  
+  .score {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .score h2 {
+    font-size: 2rem;
+    color: #2d3748;
+  }
+  
+  .detailedAnalysis {
+    margin-top: 2rem;
+  }
+  
+  .analysisItem {
+    background: #f7fafc;
+    border-radius: 5px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .analysisItem h3 {
+    margin-top: 0;
+    color: #2d3748;
+  }
+  
+  .analysisItem p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+  }
