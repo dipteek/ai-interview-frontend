@@ -170,7 +170,7 @@ export default function InterviewPage({ params }) {
   };
 
   const renderSetupScreen = () => (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-20">
       <h1 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
         <span className="mr-2">{jobRoles[params.id]} Interview</span>
         <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Preparation</span>
