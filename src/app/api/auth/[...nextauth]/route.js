@@ -1,12 +1,11 @@
-// pages/api/auth/[...nextauth].js
+// app/api/auth/[...nextauth]/route.js
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import axios from 'axios';
 
-export default NextAuth({
+const handler = NextAuth({
   providers: [
-    // Email/Password Provider
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -30,7 +29,6 @@ export default NextAuth({
       }
     }),
     
-    // Google Provider
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -70,9 +68,7 @@ export default NextAuth({
       }
       return true;
     },
-
     async jwt({ token, user, account, profile }) {
-      // Initial sign in
       if (account && user) {
         if (account.provider === 'google') {
           return {
@@ -84,16 +80,13 @@ export default NextAuth({
             userProfile: profile
           };
         } else {
-          // For credentials provider
           token.user = user;
         }
       }
       return token;
     },
-
     async session({ session, token }) {
       if (token.accessToken) {
-        // Google login
         session.accessToken = token.accessToken;
         session.refreshToken = token.refreshToken;
         session.djangoToken = token.djangoToken;
@@ -102,23 +95,17 @@ export default NextAuth({
           ...token.djangoUser
         };
       } else {
-        // Credentials login
         session.user = token.user;
       }
       return session;
     },
   },
-
-  session: {
-    strategy: 'jwt',
-  },
-
   pages: {
     signIn: '/login',
     signOut: '/logout',
     error: '/login',
   },
-
   secret: process.env.NEXTAUTH_SECRET,
-  database: process.env.DATABASE_URL, // Optional: Only if you want to persist users
 });
+
+export { handler as GET, handler as POST };
