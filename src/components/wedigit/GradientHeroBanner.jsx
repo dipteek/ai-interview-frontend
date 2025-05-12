@@ -8,7 +8,7 @@ const GradientHeroBanner = () => {
   const [isVideoHovered, setIsVideoHovered] = useState(false);
   
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-indigo-900 via-violet-800 to-purple-900 text-white">
+    <section className="relative overflow-hidden bg-gradient-to-br from-indigo-900 via-violet-800 to-purple-900 text-white -mt-2">
       {/* Abstract shapes */}
       <div className="absolute top-0 left-0 w-full h-full">
         <div className="absolute top-1/4 left-1/4 w-1/3 h-1/3 rounded-full bg-indigo-600 opacity-10 blur-3xl"></div>

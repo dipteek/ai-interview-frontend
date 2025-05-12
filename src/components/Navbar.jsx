@@ -13,9 +13,12 @@ import {
   FaUsers,
   FaBuilding,
   FaHome,
+  FaSignOutAlt,
 } from "react-icons/fa";
+import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
+  const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -71,6 +74,10 @@ const Navbar = () => {
 
   const toggleDropdown = (name) => {
     setActiveDropdown(activeDropdown === name ? null : name);
+  };
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: '/' });
   };
 
   return (
@@ -245,21 +252,38 @@ const Navbar = () => {
 
             {/* Right side elements (login, CTA) */}
             <div className="flex items-center pl-6 space-x-4 border-l border-gray-200">
-              {/* Login button */}
-              <Link
-                href="/login"
-                className="px-4 py-2 text-sm font-medium border border-black text-gray-700 bg-white hover:bg-gray-50"
-              >
-                Login
-              </Link>
+              {/* Conditional rendering based on authentication status */}
+              {!session ? (
+                <>
+                  <Link
+                    href="/login"
+                    className="px-4 py-2 text-sm font-medium border border-black text-gray-700 bg-white hover:bg-gray-50"
+                  >
+                    Login
+                  </Link>
 
-              {/* Get Started button */}
-              <Link
-                href="/interview"
-                className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-all"
-              >
-                Get Started
-              </Link>
+                  <Link
+                    href="/interview"
+                    className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-all"
+                  >
+                    Get Started
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center space-x-4">
+                    <div className="text-sm text-gray-700">
+                      Hi, {session.user?.name || session.user?.email}
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="px-4 py-2 text-sm font-medium border border-red-500 text-red-600 bg-white hover:bg-red-50 transition-all flex items-center"
+                    >
+                      <FaSignOutAlt className="mr-2" /> Logout
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -473,33 +497,49 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Mobile buttons */}
-          <div className="px-4 py-4 space-y-3 mt-2">
-            <div className="grid grid-cols-2 gap-2">
-              <Link
-                href="/login"
-                className="flex items-center justify-center px-3 py-2 text-sm font-medium border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-md shadow-sm"
-              >
-                <FaUser className="h-4 w-4 mr-2" />
-                Login
-              </Link>
-              <Link
-                href="/signup"
-                className="flex items-center justify-center px-3 py-2 text-sm font-medium border border-indigo-300 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md shadow-sm"
-              >
-                <FaBuilding className="h-4 w-4 mr-2" />
-                Sign Up
-              </Link>
+          {/* Mobile buttons section */}
+            <div className="px-4 py-4 space-y-3 mt-2">
+              {!session ? (
+                <>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link
+                      href="/login"
+                      className="flex items-center justify-center px-3 py-2 text-sm font-medium border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-md shadow-sm"
+                    >
+                      <FaUser className="h-4 w-4 mr-2" />
+                      Login
+                    </Link>
+                    <Link
+                      href="/signup"
+                      className="flex items-center justify-center px-3 py-2 text-sm font-medium border border-indigo-300 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md shadow-sm"
+                    >
+                      <FaBuilding className="h-4 w-4 mr-2" />
+                      Sign Up
+                    </Link>
+                  </div>
+                  <Link
+                    href="/get-started"
+                    className="block w-full px-4 py-3 text-base font-medium text-center bg-indigo-600 text-white rounded-md hover:bg-indigo-700 shadow-md transition-all duration-300 transform hover:translate-y-px"
+                  >
+                    Get Started
+                  </Link>
+                </>
+              ) : (
+                <div className="space-y-3">
+                  <div className="text-center text-sm text-gray-700 mb-2">
+                    Welcome, {session.user?.name || session.user?.email}
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full px-4 py-3 text-base font-medium text-center bg-red-600 text-white rounded-md hover:bg-red-700 shadow-md transition-all duration-300 transform hover:translate-y-px flex items-center justify-center"
+                  >
+                    <FaSignOutAlt className="mr-2" /> Logout
+                  </button>
+                </div>
+              )}
             </div>
-            <Link
-              href="/get-started"
-              className="block w-full px-4 py-3 text-base font-medium text-center bg-indigo-600 text-white rounded-md hover:bg-indigo-700 shadow-md transition-all duration-300 transform hover:translate-y-px"
-            >
-              Get Started
-            </Link>
           </div>
         </div>
-      </div>
     </nav>
   );
 };

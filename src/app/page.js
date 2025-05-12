@@ -20,18 +20,18 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <div className="pt-20">
-        <HomeBanner />
+        {/* <HomeBanner /> */}
+        <GradientHeroBanner/>
         <LogoCarousel/>
-        <FeaturesSection/>
-        <HowItWorksSection/>
+        <HomepageComponents/>
+        {/* <FeaturesSection/> */}
+        {/* <HowItWorksSection/> */}
         <IntervueHero/>
         <FAQSection/>
         <CTASection/>
-        <MinimalModernBanner/>
-        <GradientHeroBanner/>
-        <SplitScreenBanner/>
-        <ModernCTABanner/>
-        <HomepageComponents/>
+        {/* <MinimalModernBanner/> */}
+        {/* <SplitScreenBanner/> */}
+        {/* <ModernCTABanner/> */}
         {/* <TestimonialsSection/> */}
       </div>
       
