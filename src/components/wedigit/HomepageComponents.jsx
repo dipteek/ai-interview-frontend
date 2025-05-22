@@ -26,6 +26,7 @@ import {
   Settings,
   Briefcase,
 } from "lucide-react";
+import Link from "next/link";
 
 // 1. Enhanced Features Section with Animation & Interaction
 const FeaturesSection = () => {
@@ -463,13 +464,13 @@ const HowItWorksSection = () => {
               </div>
 
               <div className="bg-gray-50 p-4">
-                <a
-                  href="/get-started"
+                <Link
+                  href="/interview"
                   className="flex items-center justify-center w-full rounded-lg bg-indigo-600 px-4 py-3 text-base font-medium text-white transition hover:bg-indigo-700 shadow-md"
                 >
                   Get Started
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -623,13 +624,13 @@ const HowItWorksSection = () => {
                 </div>
 
                 <div className="mt-8">
-                  <a
-                    href="/get-started"
+                  <Link
+                    href={"/interview"}
                     className="inline-flex items-center justify-center w-full rounded-lg bg-indigo-600 px-6 py-4 text-lg font-medium text-white transition-all hover:bg-indigo-700 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
                     Get Started Now
                     <ArrowRight className="ml-2 h-5 w-5" />
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -760,8 +761,8 @@ const StatisticsSection = () => {
             },
           ].map((stat, index) => (
             <div key={index} className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 to-blue-600 rounded-2xl transform group-hover:scale-[1.03] transition-all duration-300 ease-out"></div>
-              <div className="relative bg-indigo-800 rounded-2xl p-8 h-full border border-indigo-700 transform group-hover:translate-y-1 group-hover:translate-x-1 transition-all duration-300 ease-out">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 to-blue-600 rounded-2xl transform scale-[1.03] group-hover:scale-[1.0] transition-all duration-300 ease-out"></div>
+              <div className="relative bg-indigo-800 rounded-2xl p-8 h-full border border-indigo-700 transform translate-y-1 translate-x-1 group-hover:translate-x-0 transition-all duration-300 ease-out">
                 <div className="bg-indigo-700 bg-opacity-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 text-white">
                   {stat.icon}
                 </div>
@@ -1005,171 +1006,10 @@ const PricingSection = () => {
 };
 
 // 6. Call-to-Action Section with Animation
-const CTASection = () => {
-  return (
-    <section className="py-20 bg-indigo-900 relative overflow-hidden">
-      {/* Visual elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(129,140,248,0.2),transparent_30%)]"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-300 to-transparent"></div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-6">
-            Ready to Transform Your Interview Success?
-          </h2>
-          <p className="text-xl text-indigo-100 mb-10">
-            Join thousands of professionals who have boosted their confidence
-            and landed their dream jobs with our AI interview coach.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/signup"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-white text-indigo-600 font-medium text-lg hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700 transition-all"
-            >
-              Start Free Trial
-              <Zap className="ml-2 h-5 w-5" />
-            </a>
-
-            <a
-              href="/demo"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-lg border-2 border-white text-white font-medium text-lg hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700 transition-all"
-            >
-              Watch Demo
-              <PlayCircle className="ml-2 h-5 w-5" />
-            </a>
-          </div>
-
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6">
-            <div className="flex items-center">
-              <Check className="h-5 w-5 text-green-400 mr-2" />
-              <p className="text-indigo-100">No credit card required</p>
-            </div>
-            <div className="flex items-center">
-              <Check className="h-5 w-5 text-green-400 mr-2" />
-              <p className="text-indigo-100">Cancel anytime</p>
-            </div>
-            <div className="flex items-center">
-              <Check className="h-5 w-5 text-green-400 mr-2" />
-              <p className="text-indigo-100">24/7 support</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
 
 // 7. FAQ Section with Accordion
-const FAQSection = () => {
-  const [openIndex, setOpenIndex] = useState(0);
 
-  const faqs = [
-    {
-      question: "How does the AI interview coach work?",
-      answer:
-        "Our AI interview coach uses natural language processing and machine learning to create realistic interview scenarios. It analyzes your responses in real-time, evaluating factors like clarity, relevance, and confidence. After each practice session, you'll receive detailed feedback and actionable tips to improve your performance.",
-    },
-    {
-      question: "Is this suitable for all career levels and industries?",
-      answer:
-        "Yes! Our platform is designed to accommodate professionals at all career stages, from entry-level to executive positions. We offer industry-specific question libraries for over 40 sectors including technology, finance, healthcare, marketing, and more. The AI adapts to your experience level and target role for personalized preparation.",
-    },
-    {
-      question: "How does the subscription work?",
-      answer:
-        "Our subscription plans are flexible and designed to meet your needs. You can choose between monthly or annual billing, with the latter offering significant savings. All plans include a free trial period, and you can cancel anytime. Your subscription grants you immediate access to all features included in your chosen plan.",
-    },
-    {
-      question: "Can I practice with video interviews?",
-      answer:
-        "Absolutely! Our Professional and Enterprise plans include video interview capability, allowing you to practice both verbal responses and non-verbal communication. The AI will analyze your body language, eye contact, and facial expressions, providing comprehensive feedback to help you make a strong impression.",
-    },
-    {
-      question: "How accurate is the AI feedback?",
-      answer:
-        "Our AI has been trained on thousands of successful interviews and calibrated by professional recruiters and hiring managers. It evaluates your responses based on clarity, relevance, structure, and impact—the same criteria used by human interviewers. While no AI is perfect, our users report that the feedback closely matches what they later experience in real interviews.",
-    },
-  ];
-
-  return (
-    <section className="py-20 bg-white relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(224,231,255,0.6),transparent_30%)]"></div>
-
-      <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
-          <p className="text-sm font-semibold text-indigo-600 tracking-wide uppercase mb-2">
-            Have Questions?
-          </p>
-          <h2 className="text-4xl font-bold text-gray-900 tracking-tight mb-4">
-            Frequently Asked Questions
-          </h2>
-          <div className="w-20 h-1 bg-indigo-600 mx-auto mb-6"></div>
-          <p className="text-xl text-gray-600">
-            Everything you need to know about our AI interview coach
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className={`border rounded-xl overflow-hidden transition-all duration-300 ${
-                openIndex === index
-                  ? "shadow-md border-indigo-200"
-                  : "border-gray-200"
-              }`}
-            >
-              <button
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex items-center justify-between p-6 text-left"
-              >
-                <h3
-                  className={`text-lg font-medium ${
-                    openIndex === index ? "text-indigo-600" : "text-gray-900"
-                  }`}
-                >
-                  {faq.question}
-                </h3>
-                <ChevronRight
-                  className={`h-5 w-5 transform transition-transform ${
-                    openIndex === index
-                      ? "rotate-90 text-indigo-600"
-                      : "text-gray-400"
-                  }`}
-                />
-              </button>
-
-              <div
-                className={`transition-all duration-300 overflow-hidden ${
-                  openIndex === index
-                    ? "max-h-96 opacity-100"
-                    : "max-h-0 opacity-0"
-                }`}
-              >
-                <div className="p-6 pt-0 text-gray-600">{faq.answer}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 text-center">
-          <p className="text-gray-600 mb-4">
-            Can't find what you're looking for?
-          </p>
-          <a
-            href="/contact"
-            className="inline-flex items-center font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
-          >
-            Contact our support team
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-};
 
 // Main Component - You can import any of these sections into your homepage
 const HomepageComponents = () => {
@@ -1179,9 +1019,9 @@ const HomepageComponents = () => {
       <HowItWorksSection />
       <StatisticsSection />
       <TestimonialsSection />
-      <PricingSection />
-      <FAQSection />
-      <CTASection />
+      {/* <PricingSection /> */}
+      {/* <FAQSection /> */}
+      {/* <CTASection /> */}
     </div>
   );
 };
