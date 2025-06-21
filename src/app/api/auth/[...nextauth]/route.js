@@ -19,16 +19,23 @@ const handler = NextAuth({
             password: credentials.password
           });
 
-          if (response.data.user) {
-            return response.data.user;
+          console.log('Login response:', response.data); // Add this
+
+          if (response.data.user && response.data.token) {
+            return {
+              ...response.data.user,
+              djangoToken: response.data.token,
+            };
           }
           return null;
         } catch (error) {
+          console.error('Credentials error:', error?.response?.data || error.message);
           throw new Error(error.response?.data?.message || 'Login failed');
         }
       }
+
     }),
-    
+
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -80,7 +87,9 @@ const handler = NextAuth({
             userProfile: profile
           };
         } else {
-          token.user = user;
+          //token.user = user;
+          token.djangoToken = user.djangoToken;
+          token.djangoUser = user; // store user info too
         }
       }
       return token;

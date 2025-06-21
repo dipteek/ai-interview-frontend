@@ -10,17 +10,17 @@ export default function IntervueHero() {
   // Testimonials data
   const testimonials = [
     {
-      quote: "Intervue is a true game changer in the hiring space. As a hiring manager it makes my team very productive if I am not having to worry about using my team's interviewing bandwidth",
+      quote: "AI Interview is a true game changer in the hiring space. As a hiring manager it makes my team very productive if I am not having to worry about using my team's interviewing bandwidth",
       company: "Yubi",
       logo: "Yubi"
     },
     {
-      quote: "Intervue transformed our hiring process and saved our engineering team countless hours of interviewing time",
+      quote: "AI Interview transformed our hiring process and saved our engineering team countless hours of interviewing time",
       company: "TechCorp",
       logo: "TechCorp"
     },
     {
-      quote: "The quality of candidates we receive through Intervue has consistently exceeded our expectations",
+      quote: "The quality of candidates we receive through AI Interview has consistently exceeded our expectations",
       company: "DevInc",
       logo: "DevInc"
     },

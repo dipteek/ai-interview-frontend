@@ -22,11 +22,11 @@ export default function Home() {
       <div className="pt-20">
         {/* <HomeBanner /> */}
         <GradientHeroBanner/>
-        <LogoCarousel/>
+        {/* <LogoCarousel/> add company detail temp*/}
         <HomepageComponents/>
         {/* <FeaturesSection/> */}
         {/* <HowItWorksSection/> */}
-        <IntervueHero/>
+        {/* <IntervueHero/>  temp coding page*/}
         <FAQSection/>
         <CTASection/>
         {/* <MinimalModernBanner/> */}
