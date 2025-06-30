@@ -1,7 +1,8 @@
+//voice_interview/[id]/page.jsx 
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Mic, MicOff, Volume2, ArrowLeft, ArrowRight, Send, Home, CheckCircle2, Clock, User, Code, Zap, AlertCircle, Timer } from 'lucide-react';
+import { Mic, MicOff, Volume2, ArrowLeft, ArrowRight, Send, Home, CheckCircle2, Clock, User, Code, Zap, AlertCircle, Timer, BarChart3 } from 'lucide-react';
 
 export default function InterviewPage({ params }) {
   const [experience, setExperience] = useState('');
@@ -12,19 +13,23 @@ export default function InterviewPage({ params }) {
   const [currentJobRole, setCurrentJobRole] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  // timer
+  const [startTime, setStartTime] = useState(null);
+  const [questionStartTimes, setQuestionStartTimes] = useState({});
+
   const [isRecording, setIsRecording] = useState(false);
   const [userAnswers, setUserAnswers] = useState([]);
   const [analysis, setAnalysis] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [interviewId, setInterviewId] = useState(null);
   const [jobRoleId, setJobRoleId] = useState(null); // Add state for job role ID
-  
+
   // Interview limit states
   const [remainingAttempts, setRemainingAttempts] = useState(3);
   const [limitReached, setLimitReached] = useState(false);
   const [timeUntilReset, setTimeUntilReset] = useState(null);
   const [isCheckingLimit, setIsCheckingLimit] = useState(true);
-  
+
   const recognitionRef = useRef(null);
   const synthRef = useRef(null);
   const router = useRouter();
@@ -171,10 +176,16 @@ export default function InterviewPage({ params }) {
       }
 
       if (!response.ok) throw new Error(data.error || 'Failed to generate questions');
-      
+
       setQuestions(data.questions);
       setInterviewId(data.interview_id);
       setRemainingAttempts(data.remaining_attempts);
+
+      // ✅ ADD THESE LINES FOR TIME TRACKING
+      const currentTime = new Date().toISOString();
+      setStartTime(currentTime);
+      setQuestionStartTimes({ 0: currentTime });
+
       speakQuestion(data.questions[0].question);
     } catch (error) {
       console.error('Error generating questions:', error);
@@ -228,8 +239,16 @@ export default function InterviewPage({ params }) {
 
   const nextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      speakQuestion(questions[currentQuestionIndex + 1].question);
+      const newIndex = currentQuestionIndex + 1;
+      setCurrentQuestionIndex(newIndex);
+
+      // i add this line for TIME TRACKING
+      setQuestionStartTimes(prev => ({
+        ...prev,
+        [newIndex]: new Date().toISOString()
+      }));
+
+      speakQuestion(questions[newIndex].question);
     }
   };
 
@@ -254,6 +273,7 @@ export default function InterviewPage({ params }) {
           questions: questions,
           userAnswers: userAnswers,
           interview_id: interviewId,
+          start_time: startTime, // ✅ ADD THIS LINE
         }),
       });
 
@@ -268,6 +288,7 @@ export default function InterviewPage({ params }) {
       setIsLoading(false);
     }
   };
+
 
   const getScoreColor = (score) => {
     if (score >= 8) return 'text-green-600';
@@ -317,9 +338,8 @@ export default function InterviewPage({ params }) {
             <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
               {/* Interview Limit Status */}
               <div className="mb-6">
-                <div className={`flex items-center justify-between p-4 rounded-xl border-2 ${
-                  limitReached ? 'bg-red-50 border-red-200' : remainingAttempts <= 1 ? 'bg-yellow-50 border-yellow-200' : 'bg-green-50 border-green-200'
-                }`}>
+                <div className={`flex items-center justify-between p-4 rounded-xl border-2 ${limitReached ? 'bg-red-50 border-red-200' : remainingAttempts <= 1 ? 'bg-yellow-50 border-yellow-200' : 'bg-green-50 border-green-200'
+                  }`}>
                   <div className="flex items-center">
                     {limitReached ? (
                       <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
@@ -337,9 +357,8 @@ export default function InterviewPage({ params }) {
                       )}
                     </div>
                   </div>
-                  <div className={`px-3 py-1 rounded-full text-sm font-bold ${
-                    limitReached ? 'bg-red-200 text-red-800' : 'bg-blue-200 text-blue-800'
-                  }`}>
+                  <div className={`px-3 py-1 rounded-full text-sm font-bold ${limitReached ? 'bg-red-200 text-red-800' : 'bg-blue-200 text-blue-800'
+                    }`}>
                     {remainingAttempts}/3
                   </div>
                 </div>
@@ -468,16 +487,14 @@ export default function InterviewPage({ params }) {
               {/* Show remaining attempts */}
               <div className="mb-6">
                 <div className="flex items-center justify-center">
-                  <div className={`px-4 py-2 rounded-full border-2 ${
-                    remainingAttempts > 1 ? 'bg-green-50 border-green-200' : 
-                    remainingAttempts === 1 ? 'bg-yellow-50 border-yellow-200' : 
-                    'bg-red-50 border-red-200'
-                  }`}>
-                    <span className={`text-sm font-semibold ${
-                      remainingAttempts > 1 ? 'text-green-800' : 
-                      remainingAttempts === 1 ? 'text-yellow-800' : 
-                      'text-red-800'
+                  <div className={`px-4 py-2 rounded-full border-2 ${remainingAttempts > 1 ? 'bg-green-50 border-green-200' :
+                      remainingAttempts === 1 ? 'bg-yellow-50 border-yellow-200' :
+                        'bg-red-50 border-red-200'
                     }`}>
+                    <span className={`text-sm font-semibold ${remainingAttempts > 1 ? 'text-green-800' :
+                        remainingAttempts === 1 ? 'text-yellow-800' :
+                          'text-red-800'
+                      }`}>
                       {remainingAttempts} interview{remainingAttempts !== 1 ? 's' : ''} remaining today
                     </span>
                   </div>
@@ -531,34 +548,33 @@ export default function InterviewPage({ params }) {
                 ))}
               </div>
 
-              <div className="text-center mt-8 space-y-4">
+              <div className="flex gap-4 justify-center">
                 {remainingAttempts > 0 && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-                    <p className="text-blue-800 font-medium">
-                      You have {remainingAttempts} more interview{remainingAttempts !== 1 ? 's' : ''} available today!
-                    </p>
-                  </div>
-                )}
-                
-                <div className="flex gap-4 justify-center">
-                  {remainingAttempts > 0 && (
-                    <button
-                      onClick={() => window.location.reload()}
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-8 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center"
-                    >
-                      <Zap className="w-5 h-5 mr-2" />
-                      Take Another Interview
-                    </button>
-                  )}
-                  
                   <button
-                    onClick={() => router.push('/')}
-                    className="bg-gradient-to-r from-gray-600 to-gray-700 text-white py-3 px-8 rounded-xl font-semibold hover:from-gray-700 hover:to-gray-800 transition-all duration-200 flex items-center"
+                    onClick={() => window.location.reload()}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-8 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center"
                   >
-                    <Home className="w-5 h-5 mr-2" />
-                    Back to Home
+                    <Zap className="w-5 h-5 mr-2" />
+                    Take Another Interview
                   </button>
-                </div>
+                )}
+
+                {/* ✅ ADD THIS NEW DASHBOARD BUTTON */}
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 px-8 rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-200 flex items-center"
+                >
+                  <BarChart3 className="w-5 h-5 mr-2" />
+                  View Dashboard
+                </button>
+
+                <button
+                  onClick={() => router.push('/')}
+                  className="bg-gradient-to-r from-gray-600 to-gray-700 text-white py-3 px-8 rounded-xl font-semibold hover:from-gray-700 hover:to-gray-800 transition-all duration-200 flex items-center"
+                >
+                  <Home className="w-5 h-5 mr-2" />
+                  Back to Home
+                </button>
               </div>
             </div>
           </div>
@@ -577,11 +593,10 @@ export default function InterviewPage({ params }) {
                       {Math.round(((currentQuestionIndex + 1) / questions.length) * 100)}% Complete
                     </span>
                   </div>
-                  <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    remainingAttempts > 1 ? 'bg-green-100 text-green-800' : 
-                    remainingAttempts === 1 ? 'bg-yellow-100 text-yellow-800' : 
-                    'bg-red-100 text-red-800'
-                  }`}>
+                  <div className={`px-3 py-1 rounded-full text-sm font-semibold ${remainingAttempts > 1 ? 'bg-green-100 text-green-800' :
+                      remainingAttempts === 1 ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                    }`}>
                     {remainingAttempts} left today
                   </div>
                 </div>
