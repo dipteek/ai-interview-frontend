@@ -13,3 +13,4 @@ export async function generateQuestions(data) {
   
     return await response.json();
   }
+

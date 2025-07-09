@@ -16,6 +16,10 @@ export async function middleware(request) {
   // Check if the path is a protected interview subpath
   // This will match paths like /interview/abc but NOT /interview itself
   const isProtectedInterviewSubpath = path.startsWith('/interview/');
+
+  const isProtectedVoiceInterviewSubpath = path.startsWith('/voice_interview/');
+
+  
   
   // Get the user token (depends on your auth solution)
   const token = await getToken({ req: request });
@@ -26,6 +30,10 @@ export async function middleware(request) {
   // If the user is logged in and trying to access auth routes, redirect to home
   if (isAuthenticated && isAuthRoute) {
     return NextResponse.redirect(new URL('/', request.url));
+  }
+
+  if (!isAuthenticated && isProtectedVoiceInterviewSubpath) {
+    return NextResponse.redirect(new URL('/login', request.url));
   }
   
   // If the user is not logged in and trying to access protected interview subpaths, redirect to login
@@ -45,6 +53,7 @@ export const config = {
     '/register', 
     '/signup', 
     '/signin',
-    '/interview/:path*'  // This will match all subpaths under /interview but NOT /interview itself
+    '/interview/:path*',  // This will match all subpaths under /interview but NOT /interview itself
+    '/voice_interview/:path*'
   ]
 };

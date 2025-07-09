@@ -17,11 +17,17 @@ import {
 } from "react-icons/fa";
 import { signOut, useSession } from "next-auth/react";
 
+
+
+
 const Navbar = () => {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+
+  
+const isAuthenticated = !!session;
 
   // Update scroll state for navbar styling
   useEffect(() => {
@@ -116,12 +122,12 @@ const Navbar = () => {
                 Home
               </Link>
 
-              <Link
+              {/* <Link
                 href="/interview"
                 className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
               >
                 Interview
-              </Link>
+              </Link> */}
 
               {/* Products Dropdown */}
               {/* <div className="relative dropdown-container">
@@ -170,7 +176,7 @@ const Navbar = () => {
                   onClick={() => toggleDropdown("solutions")}
                   className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors flex items-center gap-1 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
                 >
-                  Solutions
+                  Interview
                   <FaChevronDown
                     className={`h-3 w-3 transition-transform ${
                       activeDropdown === "solutions" ? "rotate-180" : ""
@@ -180,34 +186,41 @@ const Navbar = () => {
                 {activeDropdown === "solutions" && (
                   <div className="absolute mt-2 w-56 bg-white rounded-md shadow-lg p-2 z-50 animate-fadeIn">
                     <Link
-                      href="/enterprise"
+                      href="/interview"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
                     >
-                      Enterprise
+                      MCQS
                     </Link>
                     <Link
-                      href="/small-business"
+                      href="/voice_interview"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
                     >
-                      Small Business
+                      Voice/Type
                     </Link>
                     <Link
-                      href="/personal"
+                      href="/coding"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
                     >
-                      Personal
+                      Coding
                     </Link>
                   </div>
                 )}
               </div>
 
+              <Link
+                href="/"
+                className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
+              >
+                Resume
+              </Link>
+
               {/* Resources Dropdown */}
-              <div className="relative dropdown-container">
+              {isAuthenticated?<div className="relative dropdown-container">
                 <button
                   onClick={() => toggleDropdown("resources")}
                   className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors flex items-center gap-1 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
                 >
-                  Resources
+                  Dashboard
                   <FaChevronDown
                     className={`h-3 w-3 transition-transform ${
                       activeDropdown === "resources" ? "rotate-180" : ""
@@ -217,37 +230,46 @@ const Navbar = () => {
                 {activeDropdown === "resources" && (
                   <div className="absolute mt-2 w-56 bg-white rounded-md shadow-lg p-2 z-50 animate-fadeIn">
                     <Link
-                      href="/blog"
+                      href="/analytics"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
                     >
-                      Blog
+                      Analytics Code
                     </Link>
                     <Link
-                      href="/documentation"
+                      href="/dashboard-code"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
                     >
-                      Documentation
+                      Code Report
                     </Link>
                     <Link
-                      href="/webinars"
+                      href="/dashboard"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-md"
                     >
-                      Webinars
+                      Interview
                     </Link>
                   </div>
                 )}
-              </div>
+              </div>:"" }
 
               {/* <Link href="/pricing" className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all">
                 Pricing
               </Link> */}
 
-              <Link
+              {/* {
+                isAuthenticated?<Link
+                href="/dashboard"
+                className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
+              >
+                Dashboard
+              </Link>:
+             <Link
                 href="/contact"
                 className="px-3 py-2 text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all"
               >
                 Contact
               </Link>
+              } */}
+              
             </div>
 
             {/* Right side elements (login, CTA) */}
@@ -425,7 +447,7 @@ const Navbar = () => {
             </div>
 
             {/* Mobile dropdown for Resources */}
-            <div className="border-b border-gray-100">
+            {isAuthenticated?<div className="border-b border-gray-100">
               <button
                 onClick={() => toggleDropdown("mobileResources")}
                 className="flex justify-between items-center w-full px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600"
@@ -434,7 +456,7 @@ const Navbar = () => {
                   <div className="bg-indigo-100 p-2 rounded-md mr-3">
                     <FaCheckCircle className="h-4 w-4 text-indigo-600" />
                   </div>
-                  <span>Resources</span>
+                  <span>Dashboard</span>
                 </div>
                 <FaChevronDown
                   className={`h-4 w-4 transition-transform duration-300 text-gray-500 ${
@@ -451,29 +473,29 @@ const Navbar = () => {
               >
                 <div className="bg-gray-50 rounded-md m-2 p-2 space-y-1">
                   <Link
-                    href="/blog"
+                    href="/analytics"
                     className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md"
                   >
                     <div className="w-1 h-1 bg-indigo-600 rounded-full mr-2"></div>
-                    Blog
+                    Analytics Code
                   </Link>
                   <Link
-                    href="/documentation"
+                    href="/dashboard-code"
                     className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md"
                   >
                     <div className="w-1 h-1 bg-indigo-600 rounded-full mr-2"></div>
-                    Documentation
+                    Code Report
                   </Link>
                   <Link
-                    href="/webinars"
+                    href="/dashboard"
                     className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 rounded-md"
                   >
                     <div className="w-1 h-1 bg-indigo-600 rounded-full mr-2"></div>
-                    Webinars
+                    Interview Report
                   </Link>
                 </div>
               </div>
-            </div>
+            </div>:""}
 
             {/* <Link href="/pricing" className="flex items-center px-4 py-3 text-base font-medium text-gray-800 hover:text-indigo-600 border-b border-gray-100">
               <div className="flex items-center">

@@ -24,3 +24,98 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+/* Add to your global CSS */
+.prose-invert ul {
+  @apply list-disc list-inside ml-4 space-y-1;
+}
+
+.prose-invert ol {
+  @apply list-decimal list-inside ml-4 space-y-1;
+}
+
+.prose-invert li {
+  @apply text-gray-300;
+}
+
+.prose-invert p {
+  @apply mb-2 text-gray-300;
+}
+
+.prose-invert strong {
+  @apply font-semibold text-white;
+}
+
+.prose-invert code {
+  @apply bg-gray-800 px-1 py-0.5 rounded text-blue-300 text-xs;
+}
+
+.prose-invert em {
+  @apply italic text-yellow-300;
+}
+
+/* Add this to your global CSS file (globals.css or similar) */
+
+/* Prose styling for HTML content in examples */
+.prose-invert ul {
+  list-style-type: disc;
+  list-style-position: inside;
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose-invert ol {
+  list-style-type: decimal;
+  list-style-position: inside;
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose-invert li {
+  color: rgb(209 213 219); /* text-gray-300 */
+  margin-bottom: 0.25rem;
+  line-height: 1.5;
+}
+
+.prose-invert p {
+  margin-bottom: 0.5rem;
+  color: rgb(209 213 219); /* text-gray-300 */
+  line-height: 1.6;
+}
+
+.prose-invert strong {
+  font-weight: 600;
+  color: rgb(255 255 255); /* text-white */
+}
+
+.prose-invert code {
+  background-color: rgb(31 41 55); /* bg-gray-800 */
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  color: rgb(147 197 253); /* text-blue-300 */
+  font-size: 0.75rem;
+  font-family: 'Courier New', monospace;
+}
+
+.prose-invert em {
+  font-style: italic;
+  color: rgb(253 224 71); /* text-yellow-300 */
+}
+
+/* Ensure nested elements have proper spacing */
+.prose-invert ul li,
+.prose-invert ol li {
+  padding-left: 0.5rem;
+}
+
+.prose-invert ul ul,
+.prose-invert ol ol,
+.prose-invert ul ol,
+.prose-invert ol ul {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  margin-left: 1rem;
+}

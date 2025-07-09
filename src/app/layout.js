@@ -6,6 +6,9 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { SessionProvider } from 'next-auth/react';
+import { DisplayFooterProvider,FooterContext } from "@/context/FooterContext";
+import { useContext } from "react";
+
 
 // Move font declarations outside the component
 const geistSans = Geist({
@@ -18,19 +21,35 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+function FooterWrapper() {
+  const { isDisplayFooter } = useContext(FooterContext);
+  return isDisplayFooter ? <Footer /> : null;
+}
+
 // Separate metadata into its own file or remove it (since it won't work with 'use client')
 // Create a separate metadata.js file if needed
 
 export default function RootLayout({ children }) {
+  
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider>
+          
           <Navbar/>
+          <DisplayFooterProvider>
           {children}
-          <Footer/>
+          <FooterWrapper />
+          </DisplayFooterProvider>
+            
+          
+          
+            {/* {footer && <Footer/>}  */}
+          
+        
         </SessionProvider>
       </body>
     </html>

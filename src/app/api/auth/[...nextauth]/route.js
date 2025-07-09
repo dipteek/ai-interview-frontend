@@ -22,9 +22,16 @@ const handler = NextAuth({
           console.log('Login response:', response.data); // Add this
 
           if (response.data.user && response.data.token) {
+            //localStorage.setItem('token', response.data.token)
+            //localStorage.setItem('user', JSON.stringify(response.data.user))
             return {
               ...response.data.user,
               djangoToken: response.data.token,
+              id: response.data.user.id,
+              email: response.data.user.email,
+              name: response.data.user.username || response.data.user.first_name,
+              token: response.data.token, // Store Django token
+              //djangoToken: response.data.token // Also store as djangoToken
             };
           }
           return null;
@@ -53,7 +60,7 @@ const handler = NextAuth({
       if (account.provider === 'google') {
         try {
           const response = await axios.post(
-            `${process.env.DJANGO_API_URL}/api/auth/google/register/`,
+            /*`${process.env.DJANGO_API_URL}/api/auth/google/register/`*/`${process.env.NEXT_PUBLIC_BACKEND_URL}/dj-rest-auth/google/`,
             {
               id_token: account.id_token,
               access_token: account.access_token,
@@ -63,8 +70,11 @@ const handler = NextAuth({
           );
 
           if (response.data.success) {
-            user.djangoToken = response.data.token;
+            user.djangoToken = response.data.access;
+            //user.djangoToken = response.data.token;
             user.djangoUser = response.data.user;
+            //localStorage.setItem('token', response.data.token)
+            //localStorage.setItem('user', JSON.stringify(response.data.user))
             return true;
           }
           return false;
@@ -75,7 +85,7 @@ const handler = NextAuth({
       }
       return true;
     },
-    async jwt({ token, user, account, profile }) {
+    /*async jwt({ token, user, account, profile }) {
       if (account && user) {
         if (account.provider === 'google') {
           return {
@@ -93,12 +103,28 @@ const handler = NextAuth({
         }
       }
       return token;
-    },
+    },*/
+    async jwt({ token, user, account }) {
+  if (user?.djangoToken) {
+    token.jwtToken = user.jwtToken
+    //token.djangoToken = user.djangoToken;
+    token.djangoToken = user.djangoToken; 
+    token.djangoUser = user.djangoUser;
+  }
+
+  if (account?.provider === 'google') {
+    token.accessToken = account.access_token;
+    token.refreshToken = account.refresh_token;
+  }
+
+  return token;
+},
     async session({ session, token }) {
       if (token.accessToken) {
         session.accessToken = token.accessToken;
         session.refreshToken = token.refreshToken;
         session.djangoToken = token.djangoToken;
+        session.jwtToken = token.jwtToken;
         session.user = {
           ...session.user,
           ...token.djangoUser
