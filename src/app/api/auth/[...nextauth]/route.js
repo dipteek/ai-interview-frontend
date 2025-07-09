@@ -21,19 +21,21 @@ const handler = NextAuth({
 
           console.log('Login response:', response.data); // Add this
 
-          if (response.data.user && response.data.token) {
+          if (response.data.user && response.data.access) {
             //localStorage.setItem('token', response.data.token)
             //localStorage.setItem('user', JSON.stringify(response.data.user))
             return {
               ...response.data.user,
-              djangoToken: response.data.token,
+              djangoToken: response.data.access,
+              refreshToken: response.data.refresh,
               id: response.data.user.id,
               email: response.data.user.email,
               name: response.data.user.username || response.data.user.first_name,
-              token: response.data.token, // Store Django token
+              //token: response.data.token, // Store Django token
               //djangoToken: response.data.token // Also store as djangoToken
             };
           }
+          console.error("Login failed: Missing expected keys", response.data);
           return null;
         } catch (error) {
           console.error('Credentials error:', error?.response?.data || error.message);
@@ -108,8 +110,9 @@ const handler = NextAuth({
   if (user?.djangoToken) {
     token.jwtToken = user.jwtToken
     //token.djangoToken = user.djangoToken;
-    token.djangoToken = user.djangoToken; 
-    token.djangoUser = user.djangoUser;
+    token.djangoToken = user.djangoToken;
+    token.refreshToken = user.refreshToken; 
+    token.djangoUser = user;
   }
 
   if (account?.provider === 'google') {
@@ -120,18 +123,19 @@ const handler = NextAuth({
   return token;
 },
     async session({ session, token }) {
-      if (token.accessToken) {
+      
         session.accessToken = token.accessToken;
         session.refreshToken = token.refreshToken;
         session.djangoToken = token.djangoToken;
-        session.jwtToken = token.jwtToken;
-        session.user = {
-          ...session.user,
-          ...token.djangoUser
-        };
-      } else {
-        session.user = token.user;
-      }
+        //session.jwtToken = token.jwtToken;
+        if (token.djangoUser) {
+    session.user = {
+      ...session.user,
+      ...token.djangoUser,
+    };
+  } else if (token.user) {
+    session.user = token.user;
+  }
       return session;
     },
   },

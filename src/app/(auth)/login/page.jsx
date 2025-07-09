@@ -13,7 +13,7 @@ import { FcGoogle } from "react-icons/fc";
 export default function Login() {
   // start session
   const router = useRouter();
-  const { status } = useSession();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     // If user is authenticated, redirect to dashboard
