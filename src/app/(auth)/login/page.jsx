@@ -9,6 +9,8 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react'; // If using NextAut
 import { FcGoogle } from "react-icons/fc";
+import { getSession } from 'next-auth/react';
+
 
 export default function Login() {
   // start session

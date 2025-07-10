@@ -87,7 +87,7 @@ const handler = NextAuth({
       }
       return true;
     },
-    /*async jwt({ token, user, account, profile }) {
+    async jwt({ token, user, account, profile }) {
       if (account && user) {
         if (account.provider === 'google') {
           return {
@@ -105,7 +105,7 @@ const handler = NextAuth({
         }
       }
       return token;
-    },*/
+    },
     async jwt({ token, user, account }) {
   if (user?.djangoToken) {
     token.jwtToken = user.jwtToken
