@@ -1,8 +1,13 @@
 // src/lib/api.js - Updated to work with NextAuth
 import axios from 'axios'
 import { getSession } from 'next-auth/react'
+import { signOut, useSession } from "next-auth/react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+
+const handleLogout = () => {
+    signOut({ callbackUrl: '/' });
+  };
 
 class ApiService {
   constructor() {
@@ -79,9 +84,14 @@ class ApiService {
       (response) => response,
       (error) => {
         if (error.response?.status === 401) {
+        //()=>{handleLogout}
+        localStorage.removeItem("token");
+  localStorage.removeItem("user");
+        //signOut({ callbackUrl: '/login' });
           console.error('Authentication failed:', error.response.data)
           // Redirect to login page
-          window.location.href = '/auth/login'
+          
+          window.location.href = '/login'
         }
         return Promise.reject(error)
       }

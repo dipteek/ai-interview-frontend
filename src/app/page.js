@@ -26,7 +26,7 @@ export default function Home() {
         <HomepageComponents/>
         {/* <FeaturesSection/> */}
         {/* <HowItWorksSection/> */}
-        {/* <IntervueHero/>  temp coding page*/}
+         <IntervueHero/>  
         <FAQSection/>
         <CTASection/>
         {/* <MinimalModernBanner/> */}
@@ -41,7 +41,7 @@ export default function Home() {
           Our Features
         </h2>
         {/* Add more content here */}
-        {/* <ProductsSection/> */}
+         {/* <ProductsSection/>  */}
         {/* <DataDrivenResults/> */}
         {/* <InterviewProcessCTA/> 
       </div> */}

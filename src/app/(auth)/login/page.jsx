@@ -7,24 +7,60 @@ import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 
 import { useEffect } from 'react';
-import { useSession } from 'next-auth/react'; // If using NextAut
+//import { useSession } from 'next-auth/react'; // If using NextAut
 import { FcGoogle } from "react-icons/fc";
 import { getSession } from 'next-auth/react';
 
-
+import { useSession, signOut } from 'next-auth/react';
 export default function Login() {
+
+
   // start session
   const router = useRouter();
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    // If user is authenticated, redirect to dashboard
-    if (status === 'authenticated') {
-      localStorage.setItem("token", session.djangoToken);
-      localStorage.setItem("user", JSON.stringify(session.user));
-      router.replace('/');
+    const token =
+  session?.djangoToken || session?.jwtToken || session?.user?.djangoToken || session?.user?.jwtToken;
+ // const token = localStorage.getItem('access_token');
+  if (token) {
+    try {
+      const decoded = JSON.parse(atob(token.split('.')[1]));
+      if (decoded.exp * 1000 > Date.now()) {
+        // Token is still valid
+        router.push('/');
+      } else {
+        //localStorage.removeItem('access_token'); // Expired, clean it up
+        signOut({ callbackUrl: '/login' });
+      }
+    } catch (e) {
+      //localStorage.removeItem('access_token'); // Invalid token, clean it up
+      signOut({ callbackUrl: '/login' });
     }
-  }, [status, router]);
+  }
+}, []);
+
+
+  // useEffect(() => {
+  //   if (status === 'loading') return;
+
+  //   if (status === 'authenticated') {
+  //     if (!session?.djangoToken) {
+  //       signOut({ callbackUrl: '/login' }); // force cleanup
+  //     } else {
+  //       router.push('/');
+  //     }
+  //   }
+  // }, [status, session]);
+
+  // useEffect(() => {
+  //   // If user is authenticated, redirect to dashboard
+  //   if (status === 'authenticated') {
+  //     localStorage.setItem("token", session.djangoToken);
+  //     localStorage.setItem("user", JSON.stringify(session.user));
+  //     router.replace('/');
+  //   }
+  // }, [status, router]);
 
   // finish session
   const { register, handleSubmit, formState: { errors } } = useForm();
