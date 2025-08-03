@@ -118,17 +118,7 @@ Make sure your Django backend is running and accessible.
 
 ---
 
-## 🚀 Deployment
 
-Deploy to [Vercel](https://vercel.com/) or any Node.js host.
-
-### Vercel Deploy Steps:
-
-1. Push code to GitHub
-2. Connect repo to Vercel
-3. Set `NEXT_PUBLIC_API_BASE_URL` in Vercel Dashboard
-
----
 
 ## 🧪 Testing Features
 
